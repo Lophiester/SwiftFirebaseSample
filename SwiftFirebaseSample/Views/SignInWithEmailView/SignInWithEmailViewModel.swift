@@ -10,7 +10,23 @@ import Observation
 
 @Observable 
 final class SignInWithEmailViewModel {
-    
     var email : String = ""
     var password : String = ""
+    
+    
+    func signUp() async throws{
+        guard !email.isEmpty, !password.isEmpty else {
+            print("No email or password found.")
+            return
+        }
+       let _ = try await AuthManager.shared.createUser(email: email, password: password)
+    }
+    func signIn() async throws{
+        guard !email.isEmpty, !password.isEmpty else {
+            print("No email or password found.")
+            return
+        }
+       let _ = try await AuthManager.shared.signIn(email: email, password: password)
+    }
+   
 }

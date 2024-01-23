@@ -7,11 +7,13 @@
 
 import Foundation
 import FirebaseAuth
-import Observation
 
 final class AuthManager {
     
-    func authanticationManager()throws -> UserData{
+    static let shared = AuthManager()
+    private init(){}
+    
+    func authManager()throws -> UserData{
         guard let user = Auth.auth().currentUser else {
             throw URLError(.badServerResponse)
         }
@@ -20,8 +22,15 @@ final class AuthManager {
     
     
     func createUser (email: String, password: String) async throws -> UserData {
-        do{
             let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
+            return UserData(user: authDataResult.user)
+    }
+    
+    func signIn (email: String, password: String) async throws -> UserData {
+        do{
+            
+            let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
+            
             return UserData(user: authDataResult.user)
         }
        
@@ -30,8 +39,12 @@ final class AuthManager {
             throw error
         }
     }
-    func logOut() throws{
+    func signOut() throws{
        try Auth.auth().signOut()
     }
+    func resetPawword(email : String) async throws {
+       try await  Auth.auth().sendPasswordReset(withEmail: email)
+    }
+
 
 }

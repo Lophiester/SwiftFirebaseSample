@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SignInWithEmailView: View {
     @State var viewModel = SignInWithEmailViewModel()
-    var auth = AuthManager()
+    @Binding var showSignInView : Bool
     
     var body: some View {
         VStack(spacing: 20){
@@ -27,13 +27,25 @@ struct SignInWithEmailView: View {
             .background(Color.gray.opacity(0.4))
             .clipShape(.buttonBorder)
             .textInputAutocapitalization(.never)
-            Button(action: {
+            Button{
                 Task{
-                    try await auth.createUser(
-                        email: viewModel.email,
-                        password: viewModel.password)
+                    do{
+                        try await viewModel.signUp()
+                        showSignInView = false
+                        return
+                    } catch{
+                        print(error)
+                    }
+                    do{
+                        try await viewModel.signIn()
+                        showSignInView = false
+                        return
+                    } catch{
+                        print(error)
+                    }
+                    
                 }
-            }, label: {
+            }label: {
                 Text("Sign In")
                     .font(.headline)
                     .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
@@ -41,7 +53,7 @@ struct SignInWithEmailView: View {
                     .foregroundStyle(.white)
                     .background(Color.blue)
                     .clipShape(.buttonBorder)
-            })
+            }
             Spacer()
         }
         .padding()
@@ -52,6 +64,6 @@ struct SignInWithEmailView: View {
 
 #Preview {
     NavigationStack{
-        SignInWithEmailView()
+        SignInWithEmailView(showSignInView: .constant(false))
     }
 }

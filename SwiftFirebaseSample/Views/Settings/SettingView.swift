@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct SettingView: View {
-    
-    var auth = AuthManager()
+
     @Binding var showSignInView: Bool
+    var viewModel = SettingViewModel()
     
     
     var body: some View {
-        VStack {
+        List {
             Button(action: {
                 Task{
                     do{
-                      try  auth.logOut()
+                        try  viewModel.signOut()
                         showSignInView = true
                     }catch{
                     print(error)
@@ -33,6 +33,25 @@ struct SettingView: View {
                     .frame(height: 55)
                     .background(Color.red)
                     .clipShape(.buttonBorder)}
+            ).padding()
+            Button(action: {
+                Task{
+                    do{
+                        try await   viewModel.resetPassword()
+                        showSignInView = true
+                    }catch{
+                    print(error)
+                    }
+                   
+                }
+            }, label: {
+                Text("Reset password")
+                    .font(.headline)
+                    .foregroundStyle(.red)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 55)
+                    .border(Color.red)
+            }
             ).padding()
             Spacer()
           
