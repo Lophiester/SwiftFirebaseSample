@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignInWithEmailView: View {
     @State var viewModel = SignInWithEmailViewModel()
+    var auth = AuthManager()
     
     var body: some View {
         VStack(spacing: 20){
@@ -19,7 +20,7 @@ struct SignInWithEmailView: View {
             .background(Color.gray.opacity(0.4))
             .clipShape(.buttonBorder)
             .textInputAutocapitalization(.never)
-           SecureField(text: $viewModel.password) {
+            SecureField(text: $viewModel.password) {
                 Text("Password")
             }
             .padding()
@@ -27,7 +28,11 @@ struct SignInWithEmailView: View {
             .clipShape(.buttonBorder)
             .textInputAutocapitalization(.never)
             Button(action: {
-                print("signin...")
+                Task{
+                    try await auth.createUser(
+                        email: viewModel.email,
+                        password: viewModel.password)
+                }
             }, label: {
                 Text("Sign In")
                     .font(.headline)

@@ -8,7 +8,8 @@
 import Foundation
 import Observation
 
-@Observable class SignInWithEmailViewModel {
+@Observable 
+final class SignInWithEmailViewModel {
     
     var email : String = ""
     var password : String = ""

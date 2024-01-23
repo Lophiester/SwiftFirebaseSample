@@ -14,11 +14,12 @@ struct SwiftFirebaseSampleApp: App {
     init(){
         FirebaseApp.configure()
         print("Firebase start")
-    
+        
     }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+                RootView()
         }
     }
 }
