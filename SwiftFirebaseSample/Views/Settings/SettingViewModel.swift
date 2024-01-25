@@ -6,8 +6,17 @@
 //
 
 import Foundation
+import Observation
 
+@Observable
  final class SettingViewModel  {
+     var authProviders: [AuthProviderOption] = []
+     
+     func loadAuthProviders(){
+         if let providers =  try? AuthManager.shared.getProvider() {
+             authProviders = providers
+         }
+     }
     
     func signOut () throws{
        try  AuthManager.shared.signOut()

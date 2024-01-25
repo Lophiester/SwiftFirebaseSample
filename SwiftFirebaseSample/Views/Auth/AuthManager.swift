@@ -19,11 +19,31 @@ final class AuthManager {
         }
         return UserData(user: user)
     }
+    func getProvider() throws -> [AuthProviderOption]{
+        guard  let providerData = Auth.auth().currentUser?.providerData else {
+            throw URLError(.badServerResponse)
+        }
+        var providers : [AuthProviderOption] = []
+        for provider in providerData {
+            if let option = AuthProviderOption(rawValue: provider.providerID) {
+                providers.append(option)
+            }else {
+//               fatalError()
+//                preconditionFailure()
+                assertionFailure("Provider option not found: \(provider.providerID)")
+            }
+        }
+        return providers
+    }
     
     func signOut() throws{
         try Auth.auth().signOut()
     }
     
+}
+enum AuthProviderOption: String {
+    case email = "password"
+    case google = "google.com"
 }
 
 // MARK: SIGN IN WITH EMAIL
