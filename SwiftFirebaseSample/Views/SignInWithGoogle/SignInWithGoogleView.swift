@@ -12,11 +12,17 @@ import GoogleSignInSwift
 struct SignInWithGoogleView: View {
     
     var viewModel = SignInWithGoogleViewModel()
-    
+    @Binding var showSignInView: Bool
     var body: some View {
         GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
             Task{
-                viewModel.signInGoogle
+                do{
+                    try await viewModel.signInGoogle()
+                    showSignInView = false
+                    
+                }catch{
+                    print(error)
+                }
             }
             print("sign in with google")
         }
@@ -24,5 +30,5 @@ struct SignInWithGoogleView: View {
 }
 
 #Preview {
-    SignInWithGoogleView()
+    SignInWithGoogleView( showSignInView: .constant(false))
 }

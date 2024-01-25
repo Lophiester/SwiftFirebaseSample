@@ -35,7 +35,7 @@ struct AuthView: View {
                     Divider()
                 }
             }
-          SignInWithGoogleView()
+            SignInWithGoogleView(showSignInView: $showSignInView)
             Spacer()
         }
         .padding()

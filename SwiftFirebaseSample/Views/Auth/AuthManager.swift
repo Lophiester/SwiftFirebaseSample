@@ -20,10 +20,18 @@ final class AuthManager {
         return UserData(user: user)
     }
     
+    func signOut() throws{
+        try Auth.auth().signOut()
+    }
+    
+}
+
+// MARK: SIGN IN WITH EMAIL
+extension AuthManager{
     
     func createUser (email: String, password: String) async throws -> UserData {
-            let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
-            return UserData(user: authDataResult.user)
+        let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
+        return UserData(user: authDataResult.user)
     }
     
     func signIn (email: String, password: String) async throws -> UserData {
@@ -33,18 +41,28 @@ final class AuthManager {
             
             return UserData(user: authDataResult.user)
         }
-       
+        
         catch{
             print("Failed to create user with error: \(error.localizedDescription)")
             throw error
         }
     }
-    func signOut() throws{
-       try Auth.auth().signOut()
-    }
     func resetPawword(email : String) async throws {
-       try await  Auth.auth().sendPasswordReset(withEmail: email)
+        try await  Auth.auth().sendPasswordReset(withEmail: email)
     }
-
-
 }
+
+// MARK: SIGN IN SSO
+extension AuthManager{
+    @discardableResult
+    func signInWithGoogle (tokens: GoogleSignInResultModel) async throws -> UserData {
+        let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
+        return try await signIn(credential: credential)
+    }
+    func signIn (credential: AuthCredential) async throws -> UserData {
+        let authDataResult = try await Auth.auth().signIn(with: credential)
+        return UserData(user: authDataResult.user)
+    }
+}
+
+
