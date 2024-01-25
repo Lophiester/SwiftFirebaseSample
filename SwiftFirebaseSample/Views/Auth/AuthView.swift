@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import GoogleSignIn
+import GoogleSignInSwift
 
 struct AuthView: View {
     @Binding var showSignInView : Bool
@@ -23,13 +25,22 @@ struct AuthView: View {
                     .background(Color.blue)
                     .clipShape(.buttonBorder)
             }
-         
-            .padding()
-            Spacer()
-
-        }.navigationTitle("Sign In")
       
+            HStack{
+                VStack{
+                    Divider()
+                }
+                Text("or")
+                VStack{
+                    Divider()
+                }
+            }
+          SignInWithGoogleView()
+            Spacer()
+        }
+        .padding()
     }
+    
 }
 
 #Preview {
