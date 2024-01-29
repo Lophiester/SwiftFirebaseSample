@@ -101,6 +101,15 @@ extension AuthManager {
         let authDataResult = try await user.link(with: credential)
         return AuthDataResultModel(user: authDataResult.user)
     }
+    func linkGoogleEmail(tokens: GoogleSignInResultModel) async throws -> AuthDataResultModel {
+        let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
+        guard let user = Auth.auth().currentUser else {
+            throw URLError(.badURL)
+        }
+        let authDataResult = try await user.link(with: credential)
+        return AuthDataResultModel(user: authDataResult.user)
+        
+    }
 }
 
 
