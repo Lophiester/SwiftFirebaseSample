@@ -93,7 +93,14 @@ extension AuthManager {
         return AuthDataResultModel(user: authDataResult.user)
     }
     
-
+    func linkEmail (email: String, password: String) async throws -> AuthDataResultModel {
+        let credential = EmailAuthProvider.credential(withEmail: email, password: password)
+        guard let user = Auth.auth().currentUser else {
+            throw URLError(.badURL)
+        }
+        let authDataResult = try await user.link(with: credential)
+        return AuthDataResultModel(user: authDataResult.user)
+    }
 }
 
 
