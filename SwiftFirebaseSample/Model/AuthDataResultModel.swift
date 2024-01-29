@@ -8,14 +8,16 @@
 import Foundation
 import FirebaseAuth
 
-struct UserData: Identifiable, Codable {
+struct AuthDataResultModel: Identifiable, Codable {
     var id : String
     var email : String?
     var photoURL : String?
+    var isAnonymous : Bool
     
     init(user : User) {
      id = user.uid
      email = user.email
-    photoURL = user.photoURL?.absoluteString
+     photoURL = user.photoURL?.absoluteString
+     isAnonymous = user.isAnonymous
     }
 }

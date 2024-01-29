@@ -13,11 +13,11 @@ final class AuthManager {
     static let shared = AuthManager()
     private init(){}
     
-    func authManager()throws -> UserData{
+    func authManager()throws -> AuthDataResultModel{
         guard let user = Auth.auth().currentUser else {
             throw URLError(.badServerResponse)
         }
-        return UserData(user: user)
+        return AuthDataResultModel(user: user)
     }
     func getProvider() throws -> [AuthProviderOption]{
         guard  let providerData = Auth.auth().currentUser?.providerData else {
@@ -49,17 +49,17 @@ enum AuthProviderOption: String {
 // MARK: SIGN IN WITH EMAIL
 extension AuthManager{
     
-    func createUser (email: String, password: String) async throws -> UserData {
+    func createUser (email: String, password: String) async throws -> AuthDataResultModel {
         let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
-        return UserData(user: authDataResult.user)
+        return AuthDataResultModel(user: authDataResult.user)
     }
     
-    func signIn (email: String, password: String) async throws -> UserData {
+    func signIn (email: String, password: String) async throws -> AuthDataResultModel {
         do{
             
             let authDataResult = try await Auth.auth().signIn(withEmail: email, password: password)
             
-            return UserData(user: authDataResult.user)
+            return AuthDataResultModel(user: authDataResult.user)
         }
         
         catch{
@@ -75,14 +75,25 @@ extension AuthManager{
 // MARK: SIGN IN SSO
 extension AuthManager{
     @discardableResult
-    func signInWithGoogle (tokens: GoogleSignInResultModel) async throws -> UserData {
+    func signInWithGoogle (tokens: GoogleSignInResultModel) async throws -> AuthDataResultModel {
         let credential = GoogleAuthProvider.credential(withIDToken: tokens.idToken, accessToken: tokens.accessToken)
         return try await signIn(credential: credential)
     }
-    func signIn (credential: AuthCredential) async throws -> UserData {
+    func signIn (credential: AuthCredential) async throws -> AuthDataResultModel {
         let authDataResult = try await Auth.auth().signIn(with: credential)
-        return UserData(user: authDataResult.user)
+        return AuthDataResultModel(user: authDataResult.user)
     }
+}
+// MARK: SIGN IN ANONYMOUS
+
+extension AuthManager {
+    @discardableResult
+    func signInAnonymous() async throws -> AuthDataResultModel{
+       let authDataResult = try await Auth.auth().signInAnonymously()
+        return AuthDataResultModel(user: authDataResult.user)
+    }
+    
+
 }
 
 

@@ -14,6 +14,7 @@ struct AuthView: View {
     
     var body: some View {
         VStack{
+           SignINAnonymous(showSignInView: $showSignInView)
             NavigationLink {
                 SignInWithEmailView(showSignInView: $showSignInView)
             } label: {
@@ -25,7 +26,7 @@ struct AuthView: View {
                     .background(Color.blue)
                     .clipShape(.buttonBorder)
             }
-      
+            
             HStack{
                 VStack{
                     Divider()
