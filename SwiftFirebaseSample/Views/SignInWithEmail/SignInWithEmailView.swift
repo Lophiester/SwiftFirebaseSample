@@ -35,7 +35,10 @@ struct SignInWithEmailView: View {
                         return
                     } catch{
                         print(error)
+                        
                     }
+                    print("sign in  with email")
+
                     do{
                         try await viewModel.signIn()
                         showSignInView = false
@@ -43,6 +46,8 @@ struct SignInWithEmailView: View {
                     } catch{
                         print(error)
                     }
+                    print("sign in  with email")
+
                     
                 }
             }label: {

@@ -13,6 +13,7 @@ struct SettingView: View {
     var viewModel = SettingViewModel()
     
     
+    
     var body: some View {
         List {
             Button("Log out"){
@@ -28,12 +29,16 @@ struct SettingView: View {
             if viewModel.authProviders.contains(.email){
                 emailSection
             }
+//            if viewModel.authUser?.isAnonymous == true{
+                anonymousSection
+          //  }
         }
-                .onAppear{
-                    viewModel.loadAuthProviders()
-                }
-            
-            .navigationTitle("Setting")
+        .onAppear{
+            viewModel.loadAuthProviders()
+            viewModel.loadAuthUser()
+        }
+        
+        .navigationTitle("Setting")
         
     }
 }
@@ -58,6 +63,35 @@ extension SettingView {
             }
         } header: {
             Text("Email functions")
+        }
+    }
+}
+
+extension SettingView {
+    private var anonymousSection: some View{
+        Section {
+            Button("Link Google Account"){
+                Task{
+                    do {
+                        try await viewModel.linkGoogleAccount()
+                        print("GOOGLE LINKED")
+                        showSignInView = false
+                    }
+                    catch{print(error)}
+                }
+            }
+            Button("Link Email Account"){
+                Task{
+                    do {
+                        try await viewModel.linkEmailAccount()
+                        print("EMAIL LINKED")
+                        showSignInView = false
+                    }
+                    catch{print(error)}
+                }
+            }
+        } header: {
+            Text("Create account")
         }
     }
 }
