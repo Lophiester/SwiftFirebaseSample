@@ -14,7 +14,7 @@ final class Utilities {
     
     @MainActor
     func getTopViewController(base: UIViewController? = nil) -> UIViewController? {
-        let base = base ?? UIApplication.shared.keyWindow?.rootViewController
+        let base = base ?? UIWindow.keyWindow?.rootViewController
         if let nav = base as? UINavigationController {
             return getTopViewController(base: nav.visibleViewController)
             
@@ -25,6 +25,18 @@ final class Utilities {
             return getTopViewController(base: presented)
         }
         return base
+    }
+    
+}
+
+extension UIWindow {
+    static var keyWindow: UIWindow? {
+        UIApplication.shared.connectedScenes
+            .filter({$0.activationState == .foregroundActive})
+            .map({$0 as? UIWindowScene})
+            .compactMap({$0})
+            .first?.windows
+            .filter({$0.isKeyWindow}).first
     }
 }
 
