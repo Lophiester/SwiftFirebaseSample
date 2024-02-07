@@ -27,6 +27,9 @@ final class SettingViewModel  {
     func signOut () throws{
        try  AuthManager.shared.signOut()
     }
+    func deleteAccount() async throws{
+        try await AuthManager.shared.deleteAccount()
+    }
     
     func resetPassword () async throws {
         let authUser = try AuthManager.shared.authManager()

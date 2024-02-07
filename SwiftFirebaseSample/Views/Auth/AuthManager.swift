@@ -40,6 +40,12 @@ final class AuthManager {
         try Auth.auth().signOut()
     }
     
+    func deleteAccount() async throws{
+        guard let user = Auth.auth().currentUser else {
+            throw URLError(.badURL)
+        }
+        try await user.delete()
+    }
 }
 enum AuthProviderOption: String {
     case email = "password"

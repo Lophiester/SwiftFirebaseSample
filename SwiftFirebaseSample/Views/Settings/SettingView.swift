@@ -26,12 +26,25 @@ struct SettingView: View {
                     }
                 }
             }
+            Button(role: .destructive) {
+                Task{
+                    do {
+                        try await viewModel.deleteAccount()
+                        showSignInView = true
+                    }
+                    catch{print(error)
+                    }
+                }
+            } label: {
+                Text("Delete Account")
+            }
+
             if viewModel.authProviders.contains(.email){
                 emailSection
             }
-//            if viewModel.authUser?.isAnonymous == true{
+            if viewModel.authUser?.isAnonymous == true{
                 anonymousSection
-          //  }
+            }
         }
         .onAppear{
             viewModel.loadAuthProviders()
