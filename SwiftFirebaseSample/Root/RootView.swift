@@ -15,12 +15,12 @@ struct RootView: View {
         ZStack{
             if !showSignInView{
                 NavigationStack{
-                    SettingView(showSignInView: $showSignInView)
+                    ProfileView(showSignView: $showSignInView)
                 }
             }
         }
         .onAppear{
-            let authUser = try? AuthManager.shared.authManager()
+            let authUser = try? AuthManager.shared.getAuthenticationUser()
             showSignInView = authUser == nil
    
             }

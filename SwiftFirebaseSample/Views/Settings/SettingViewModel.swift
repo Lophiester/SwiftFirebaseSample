@@ -21,7 +21,7 @@ final class SettingViewModel  {
      }
     
     func loadAuthUser(){
-        authUser = try? AuthManager.shared.authManager()
+        authUser = try? AuthManager.shared.getAuthenticationUser()
     }
     
     func signOut () throws{
@@ -32,7 +32,7 @@ final class SettingViewModel  {
     }
     
     func resetPassword () async throws {
-        let authUser = try AuthManager.shared.authManager()
+        let authUser = try AuthManager.shared.getAuthenticationUser()
         guard let email = authUser.email else {
             throw URLError(.fileDoesNotExist)
         }

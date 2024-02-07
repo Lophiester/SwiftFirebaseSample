@@ -13,7 +13,7 @@ final class AuthManager {
     static let shared = AuthManager()
     private init(){}
     
-    func authManager()throws -> AuthDataResultModel{
+    func getAuthenticationUser()throws -> AuthDataResultModel{
         guard let user = Auth.auth().currentUser else {
             throw URLError(.badServerResponse)
         }
@@ -46,6 +46,7 @@ final class AuthManager {
         }
         try await user.delete()
     }
+ 
 }
 enum AuthProviderOption: String {
     case email = "password"
