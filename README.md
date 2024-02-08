@@ -26,3 +26,6 @@ The project is still in progress. New features may be added and improvements mad
 
 This project is licensed under the MIT license.
 
+## 
+ [![Static Badge](https://img.shields.io/badge/license-MIT-green)](https://github.com/Lophiester/SwiftFirebaseSample/blob/main/LICENSE)
+
