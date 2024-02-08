@@ -12,6 +12,7 @@ import Observation
 final class SignInAnonymousViewModel {
     
     func signInAnonymous() async throws{
-        try await AuthManager.shared.signInAnonymous()
+     let authDataResult =   try await AuthManager.shared.signInAnonymous()
+        try await UserManager.shared.createNewUser(auth: authDataResult)
     }
 }

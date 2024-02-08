@@ -24,7 +24,8 @@ final class SignInWithGoogleViewModel{
     
     func signInGoogle() async throws{
         let tokkens = try await signInGoogleHelper()
-        try await AuthManager.shared.signInWithGoogle(tokens: tokkens)
+        let authdataResult = try await  AuthManager.shared.signInWithGoogle(tokens: tokkens)
+        try await UserManager.shared.createNewUser(auth: authdataResult)
        
     }
     

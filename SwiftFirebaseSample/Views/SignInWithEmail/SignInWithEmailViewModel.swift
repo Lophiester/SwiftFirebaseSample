@@ -19,7 +19,8 @@ final class SignInWithEmailViewModel {
             print("No email or password found.")
             return
         }
-       let _ = try await AuthManager.shared.createUser(email: email, password: password)
+       let authDataResult = try await AuthManager.shared.createUser(email: email, password: password)
+        try await UserManager.shared.createNewUser(auth: authDataResult)
     }
     func signIn() async throws{
         guard !email.isEmpty, !password.isEmpty else {
