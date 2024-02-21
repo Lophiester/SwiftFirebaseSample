@@ -10,9 +10,10 @@ import Observation
 
 @Observable
 class ProfileViewModel{
-    private (set) var user: AuthDataResultModel? = nil
+    private (set) var user: DBUser? = nil
     
-    func loadCurrentUser()  throws {
-        user = try  AuthManager.shared.getAuthenticationUser()
+    func loadCurrentUser() async throws {
+        let authDataResult = try  AuthManager.shared.getAuthenticationUser()
+        user = try await UserManager.shared.getUser(userID: authDataResult.id)
     }
 }

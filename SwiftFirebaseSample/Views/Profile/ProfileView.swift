@@ -16,12 +16,17 @@ struct ProfileView: View {
     var body: some View {
         List{
             if let user = viewModel.user{
-                Text("UserId:\(user.id)")
+                Text("UserId: \(user.userId)")
+                if let isAnonymous = user.isAnonymous{
+                    Text("Is Anonymous: \(isAnonymous.description.capitalized)")
+                }
             }
         }
-        .onAppear{
+        .task {
+            
             do{
-               try  viewModel.loadCurrentUser()}
+                try await viewModel.loadCurrentUser()
+            }
             catch{
                 print(error.localizedDescription)
             }
