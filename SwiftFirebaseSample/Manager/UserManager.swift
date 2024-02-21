@@ -19,33 +19,22 @@ final class UserManager{
         userCollection.document(userId)
     }
     
-    func createNewUser(auth: AuthDataResultModel) async throws{
-        
-        var userData:[String: Any] = [
-            "user_id" : auth.id,
-            "is_anonymous": auth.isAnonymous,
-            "date_created": Timestamp()
-        ]
-        if let email = auth.email{
-            userData["email"] = email
-        }
-        if let photoURL = auth.photoURL{
-            userData["photo_url"] = photoURL
-        }
-        
-        try await userDocument(userId: auth.id).setData(userData, merge: false)
-    }
-    
-    func getUser(userID: String) async throws -> DBUser{
-        let snapshot = try await Firestore.firestore().collection("users").document(userID).getDocument()
-        guard let data = snapshot.data(), let userId = data["user_id"] as? String else {
+    func createNewUser(user: DBUser) async throws {
+        do{
+            let encoder = Firestore.Encoder()
+            encoder.keyEncodingStrategy = .convertToSnakeCase
+            try userDocument(userId: user.id).setData(from:user, merge: false, encoder: encoder)}
+        catch{
             throw URLError(.badServerResponse)
         }
-       
-        let isAnonymous = data["is_anonymous"] as? Bool
-        let email = data["email"] as? String
-        let photoUrl = data["photo_url"] as? String
-        let dateCreated = data["date_created"] as? Date
-        return  DBUser(userId: userId,isAnonymous: isAnonymous, email: email,photoUrl: photoUrl, dateCreated: dateCreated)
     }
-}
+    
+    
+    func getUser(userId: String) async throws -> DBUser{
+
+            let decoder = Firestore.Decoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            return  try await userDocument(userId: userId).getDocument(as: DBUser.self, decoder: decoder)}
+     
+    }
+

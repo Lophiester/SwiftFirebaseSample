@@ -14,6 +14,6 @@ class ProfileViewModel{
     
     func loadCurrentUser() async throws {
         let authDataResult = try  AuthManager.shared.getAuthenticationUser()
-        user = try await UserManager.shared.getUser(userID: authDataResult.id)
+        user = try await UserManager.shared.getUser(userId: authDataResult.id)
     }
 }

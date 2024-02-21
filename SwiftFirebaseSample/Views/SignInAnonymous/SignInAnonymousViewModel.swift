@@ -13,6 +13,7 @@ final class SignInAnonymousViewModel {
     
     func signInAnonymous() async throws{
      let authDataResult =   try await AuthManager.shared.signInAnonymous()
-        try await UserManager.shared.createNewUser(auth: authDataResult)
+        let user = try DBUser(auth: authDataResult)
+        try await UserManager.shared.createNewUser(user: user)
     }
 }
