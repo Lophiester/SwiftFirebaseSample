@@ -21,9 +21,7 @@ final class UserManager{
     
     func createNewUser(user: DBUser) async throws {
         do{
-            let encoder = Firestore.Encoder()
-            encoder.keyEncodingStrategy = .convertToSnakeCase
-            try userDocument(userId: user.id).setData(from:user, merge: false, encoder: encoder)}
+            try userDocument(userId: user.userId).setData(from:user, merge: false)}
         catch{
             throw URLError(.badServerResponse)
         }
@@ -31,15 +29,13 @@ final class UserManager{
     
     
     func getUser(userId: String) async throws -> DBUser{
-        
-        let decoder = Firestore.Decoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return  try await userDocument(userId: userId).getDocument(as: DBUser.self, decoder: decoder)}
+        return  try await userDocument(userId: userId).getDocument(as: DBUser.self)}
     
     
-    func updateUserPremiumStatus(user: DBUser) async throws{
-        let encoder = Firestore.Encoder()
-        try  userDocument(userId: user.userId).setData(from: user, merge: true, encoder: encoder)
+    func updateUserPremiumStatus(userId: String, isPremium: Bool) async throws{
+        let data: [String:Any] = [
+            DBUser.CodingKeys.isPremium.rawValue : isPremium]
+        try await userDocument(userId: userId).updateData(data)
     }
 }
 

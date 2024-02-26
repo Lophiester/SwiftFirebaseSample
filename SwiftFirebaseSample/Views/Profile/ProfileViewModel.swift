@@ -20,9 +20,8 @@ class ProfileViewModel{
     func togglePremiumStatus(){
         guard let user else {return}
         let currentValue = user.isPremium ?? false
-        let updateUser = DBUser(userId: user.userId, isAnonymous: user.isAnonymous, email: user.email, photoUrl: user.photoUrl, dateCreated: user.dateCreated, isPremium: !currentValue)
         Task{
-            try await  UserManager.shared.updateUserPremiumStatus(user: updateUser)
+            try await  UserManager.shared.updateUserPremiumStatus(userId:user.userId ,isPremium: !currentValue)
             self.user = try await UserManager.shared.getUser(userId: user.userId)
         }
     }
