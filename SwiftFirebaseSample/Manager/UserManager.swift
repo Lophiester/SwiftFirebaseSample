@@ -31,10 +31,15 @@ final class UserManager{
     
     
     func getUser(userId: String) async throws -> DBUser{
-
-            let decoder = Firestore.Decoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            return  try await userDocument(userId: userId).getDocument(as: DBUser.self, decoder: decoder)}
-     
+        
+        let decoder = Firestore.Decoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return  try await userDocument(userId: userId).getDocument(as: DBUser.self, decoder: decoder)}
+    
+    
+    func updateUserPremiumStatus(user: DBUser) async throws{
+        let encoder = Firestore.Encoder()
+        try  userDocument(userId: user.userId).setData(from: user, merge: true, encoder: encoder)
     }
+}
 

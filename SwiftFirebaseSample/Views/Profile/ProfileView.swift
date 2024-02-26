@@ -20,10 +20,14 @@ struct ProfileView: View {
                 if let isAnonymous = user.isAnonymous{
                     Text("Is Anonymous: \(isAnonymous.description.capitalized)")
                 }
+                Button {
+                viewModel.togglePremiumStatus()
+                }label: {
+                    Text("User is premium: \((user.isPremium ?? false).description.capitalized)")
+                }
             }
         }
         .task {
-            
             do{
                 try await viewModel.loadCurrentUser()
             }
