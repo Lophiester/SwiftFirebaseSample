@@ -13,6 +13,12 @@ struct ProfileView: View {
   
     @Binding var showSignView : Bool
     
+    let preferenceOptions:[String] = ["Sports", "Movies", "Books"]
+    
+    private func preferencceIsSelected(text: String) -> Bool{
+        viewModel.user?.preferences?.contains(text) == true
+    }
+    
     var body: some View {
         List{
             if let user = viewModel.user{
@@ -25,6 +31,26 @@ struct ProfileView: View {
                 }label: {
                     Text("User is premium: \((user.isPremium ?? false).description.capitalized)")
                 }
+                VStack  {
+                    HStack{
+                        ForEach(preferenceOptions, id: \.self){
+                            string in
+                            Button(string){
+                                if preferencceIsSelected(text: string){
+                                    viewModel.removeUserPreference(text: string)
+                                } else{
+                                    viewModel.addUserPreference(text: string)
+                                }
+                            }
+                            .font(.headline)
+                            .buttonStyle(.borderedProminent)
+                            .tint(preferencceIsSelected(text: string) ? .green : .red )
+                        }
+                        
+                    
+                    }
+                }
+                Text("User preferences: \((user.preferences ?? []).joined(separator: ", "))").frame(maxWidth: .infinity, alignment: .leading)
             }
         }
         .task {
@@ -53,5 +79,6 @@ struct ProfileView: View {
 #Preview {
     NavigationStack{
         ProfileView(showSignView: .constant(false))
+
     }
 }

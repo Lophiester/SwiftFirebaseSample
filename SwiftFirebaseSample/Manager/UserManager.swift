@@ -37,5 +37,15 @@ final class UserManager{
             DBUser.CodingKeys.isPremium.rawValue : isPremium]
         try await userDocument(userId: userId).updateData(data)
     }
+    func addUserPreference(userId: String, preference: String) async throws{
+        let data: [String:Any] = [
+            DBUser.CodingKeys.preferences.rawValue : FieldValue.arrayUnion([preference])]
+        try await userDocument(userId: userId).updateData(data)
+    }
+    func removeUserPreference(userId: String, preference: String) async throws{
+        let data: [String:Any] = [
+            DBUser.CodingKeys.preferences.rawValue : FieldValue.arrayRemove([preference])]
+        try await userDocument(userId: userId).updateData(data)
+    }
 }
 

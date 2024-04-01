@@ -25,4 +25,18 @@ class ProfileViewModel{
             self.user = try await UserManager.shared.getUser(userId: user.userId)
         }
     }
+    func addUserPreference(text: String) {
+        guard let user else {return}
+        Task{
+            try await  UserManager.shared.addUserPreference(userId: user.userId, preference: text)
+            self.user = try await UserManager.shared.getUser(userId: user.userId)
+        }
+    }
+    func removeUserPreference(text: String) {
+        guard let user else {return}
+        Task{
+            try await  UserManager.shared.removeUserPreference(userId: user.userId, preference: text)
+            self.user = try await UserManager.shared.getUser(userId: user.userId)
+        }
+    }
 }

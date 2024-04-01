@@ -16,6 +16,7 @@ struct DBUser: Codable {
     let photoUrl: String?
     let dateCreated: Date?
     let isPremium: Bool?
+    let preferences: [String]?
     
     init(auth: AuthDataResultModel) throws {
         self.userId = auth.id
@@ -24,6 +25,7 @@ struct DBUser: Codable {
         self.photoUrl = auth.photoURL
         self.dateCreated = Date()
         self.isPremium = false
+        self.preferences = nil
     }
     
     init( userId: String,
@@ -31,7 +33,9 @@ struct DBUser: Codable {
           email: String? = nil,
           photoUrl: String? = nil,
           dateCreated: Date? = nil,
-          isPremium: Bool? = nil)
+          isPremium: Bool? = nil,
+          preferences: [String]? = nil
+    )
     {
         self.userId = userId
         self.isAnonymous = isAnonymous
@@ -39,6 +43,7 @@ struct DBUser: Codable {
         self.photoUrl = photoUrl
         self.dateCreated = dateCreated
         self.isPremium = isPremium
+        self.preferences = preferences
     }
     
     enum CodingKeys: String, CodingKey {
@@ -48,6 +53,7 @@ struct DBUser: Codable {
         case photoUrl = "photo_url"
         case dateCreated = "date_created"
         case isPremium = "user_isPremium"
+        case preferences = "preferences"
     }
     
     init(from decoder: Decoder) throws {
@@ -58,6 +64,8 @@ struct DBUser: Codable {
         self.photoUrl = try container.decodeIfPresent(String.self, forKey: .photoUrl)
         self.dateCreated = try container.decodeIfPresent(Date.self, forKey: .dateCreated)
         self.isPremium = try container.decodeIfPresent(Bool.self, forKey: .isPremium)
+        self.preferences = try container.decodeIfPresent([String].self, forKey: .preferences)
+
     }
 
     func encode(to encoder: Encoder) throws {
@@ -68,7 +76,11 @@ struct DBUser: Codable {
         try container.encodeIfPresent(self.photoUrl, forKey: .photoUrl)
         try container.encodeIfPresent(self.dateCreated, forKey: .dateCreated)
         try container.encodeIfPresent(self.isPremium, forKey: .isPremium)
+        try container.encodeIfPresent(self.preferences, forKey: .preferences)
+
     }
+    
+  
 
 }
 
